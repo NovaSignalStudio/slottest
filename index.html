@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infinity Rush Slot</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app" aria-label="Infinity Rush Slot">
+      <section class="hero">
+        <div class="hero-bg" aria-hidden="true"></div>
+
+        <header class="topbar">
+          <img class="brand-logo" src="assets/infinity-logo-header.png" alt="Infinity Hotel" />
+          <div class="status-pill">
+            <span></span>
+            Nitro ready
+          </div>
+        </header>
+
+        <section class="play-layout">
+          <aside class="info-panel">
+            <p class="kicker">Evento fortuna</p>
+            <h1>Infinity Rush</h1>
+            <p class="lead">Fai girare i rulli: se escono tre loghi Infinity, il jackpot viene sbloccato.</p>
+
+            <div class="wallet-grid">
+              <div class="wallet-card">
+                <img src="assets/diamond.svg" alt="" />
+                <span>Diamanti</span>
+                <strong id="balance">500</strong>
+              </div>
+              <div class="wallet-card">
+                <img src="assets/credits.svg" alt="" />
+                <span>Puntata</span>
+                <strong id="currentBet">10</strong>
+              </div>
+            </div>
+
+            <div class="bet-box" role="group" aria-label="Scegli puntata">
+              <button class="bet active" type="button" data-bet="10">
+                <span>Gioca 10</span>
+                <strong>Vinci 100</strong>
+              </button>
+              <button class="bet" type="button" data-bet="20">
+                <span>Gioca 20</span>
+                <strong>Vinci 200</strong>
+              </button>
+            </div>
+
+            <div class="bridge-card">
+              <span>Integrazione</span>
+              <strong>Pronta per Nitro</strong>
+              <p>La slot emette eventi JS e puo usare un endpoint server per validare puntata e premio.</p>
+            </div>
+          </aside>
+
+          <section class="slot-card" id="slotMachine" aria-label="Slot machine Infinity">
+            <div class="cabinet-lights" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="slot-head">
+              <div>
+                <span>Jackpot</span>
+                <strong id="prizeLabel">100 diamanti</strong>
+              </div>
+              <button class="sound-toggle active" type="button" id="soundToggle" aria-label="Attiva o disattiva suoni">
+                Sound
+              </button>
+            </div>
+
+            <div class="reel-frame">
+              <div class="payline" aria-hidden="true"></div>
+              <div class="reel-glass" aria-hidden="true"></div>
+              <div class="reel" id="reel0">
+                <img src="assets/infinity-logo-symbol.png" alt="" />
+              </div>
+              <div class="reel" id="reel1">
+                <img src="assets/diamond.svg" alt="" />
+              </div>
+              <div class="reel" id="reel2">
+                <img src="assets/chest.svg" alt="" />
+              </div>
+            </div>
+
+            <div class="slot-actions">
+              <div class="result" id="message" aria-live="polite">Tre loghi Infinity per vincere.</div>
+              <button class="spin-button" type="button" id="playButton">
+                <i aria-hidden="true"></i>
+                <span>Tira la leva</span>
+                <b id="spinCost">-10 dia</b>
+              </button>
+            </div>
+
+            <div class="stats-strip">
+              <div>
+                <span>Vinti</span>
+                <strong id="totalWon">0</strong>
+              </div>
+              <div>
+                <span>Ultimo esito</span>
+                <strong id="lastResult">-</strong>
+              </div>
+              <div>
+                <span>Round</span>
+                <strong id="rounds">0</strong>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <footer class="event-log">
+          <span>Log evento</span>
+          <strong id="history">In attesa della prima giocata.</strong>
+        </footer>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
