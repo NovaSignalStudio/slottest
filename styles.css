@@ -35,6 +35,7 @@ button {
 
 .client {
   min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   grid-template-rows: 38px 1fr 46px;
   background: #111820;
@@ -109,6 +110,7 @@ button {
   place-items: center;
   padding: 18px 16px;
   background:
+    radial-gradient(circle at 50% 36%, rgba(255, 216, 76, 0.1), transparent 24%),
     radial-gradient(circle at 50% 45%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.72) 72%),
     linear-gradient(30deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%) 0 0 / 92px 52px,
     linear-gradient(150deg, rgba(0, 0, 0, 0.14) 25%, transparent 25%) 0 0 / 92px 52px,
@@ -194,18 +196,70 @@ button {
 .slot-cabinet {
   position: relative;
   z-index: 2;
-  width: min(382px, calc(100vw - 28px));
+  width: min(396px, calc(100vw - 28px));
   padding: 9px 16px 13px;
   border: 3px solid #171d28;
   border-radius: 12px 12px 20px 20px;
   background:
+    radial-gradient(circle at 50% -8%, rgba(255, 255, 255, 0.22), transparent 34%),
     linear-gradient(90deg, rgba(255, 255, 255, 0.16), transparent 12%, transparent 88%, rgba(0, 0, 0, 0.25)),
     linear-gradient(#495467, #232a36 46%, #171d28);
   box-shadow:
+    inset 18px 0 26px rgba(255, 255, 255, 0.06),
+    inset -18px 0 28px rgba(0, 0, 0, 0.32),
+    inset 0 -18px 22px rgba(0, 0, 0, 0.24),
     0 0 0 3px rgba(92, 244, 255, 0.55),
     0 0 0 6px rgba(255, 100, 216, 0.42),
     0 0 26px rgba(92, 244, 255, 0.76),
     0 22px 70px rgba(0, 0, 0, 0.58);
+  transition: filter 0.25s ease, transform 0.25s ease;
+  transform: perspective(900px) rotateX(1.5deg);
+}
+
+.slot-cabinet::before {
+  animation: neonRail 2.8s linear infinite;
+}
+
+.slot-cabinet::after {
+  animation: neonRail 2.8s linear infinite reverse;
+}
+
+.slot-cabinet .cabinet-glow::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 8px 8px 16px 16px;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.16), transparent 24%, transparent 74%, rgba(92, 244, 255, 0.1));
+  pointer-events: none;
+}
+
+.slot-cabinet.spinning {
+  filter: saturate(1.12);
+}
+
+.slot-cabinet.jackpot {
+  animation: cabinetJackpot 0.32s ease-in-out 8;
+}
+
+.slot-cabinet.bonus-mode {
+  background:
+    radial-gradient(circle at 50% -8%, rgba(255, 255, 255, 0.38), transparent 34%),
+    linear-gradient(90deg, rgba(255, 244, 168, 0.28), transparent 12%, transparent 88%, rgba(80, 42, 0, 0.24)),
+    linear-gradient(#7c6127, #3c2b13 48%, #19150d);
+  box-shadow:
+    inset 18px 0 26px rgba(255, 255, 255, 0.12),
+    inset -18px 0 28px rgba(0, 0, 0, 0.32),
+    inset 0 -18px 22px rgba(0, 0, 0, 0.24),
+    0 0 0 3px rgba(255, 216, 76, 0.72),
+    0 0 0 6px rgba(255, 151, 46, 0.44),
+    0 0 34px rgba(255, 216, 76, 0.9),
+    0 22px 70px rgba(0, 0, 0, 0.58);
+}
+
+.slot-cabinet.bonus-mode::before,
+.slot-cabinet.bonus-mode::after {
+  background: linear-gradient(#fff2a8, var(--gold), white, #ff9f2e);
+  box-shadow: 0 0 22px rgba(255, 216, 76, 1);
 }
 
 .slot-cabinet::before,
@@ -278,6 +332,34 @@ button {
   text-align: center;
 }
 
+.jackpot-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+  padding: 5px 8px;
+  border: 2px solid #23364b;
+  border-radius: 5px;
+  background:
+    linear-gradient(90deg, rgba(92, 244, 255, 0.14), transparent 45%, rgba(255, 100, 216, 0.18)),
+    #071018;
+  box-shadow: inset 0 0 12px rgba(92, 244, 255, 0.14);
+}
+
+.jackpot-display span {
+  color: #75f8ff;
+  font-size: 0.67rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.jackpot-display strong {
+  color: var(--gold);
+  font-size: 1rem;
+  text-shadow: 0 0 10px rgba(255, 216, 76, 0.62);
+}
+
 .paytable h2 {
   margin: 0 0 3px;
   color: #75f8ff;
@@ -296,6 +378,13 @@ button {
   font-size: 0.74rem;
   font-weight: 900;
   text-align: left;
+  border-radius: 4px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pay-row.active {
+  background: rgba(92, 244, 255, 0.16);
+  box-shadow: inset 0 0 12px rgba(92, 244, 255, 0.22);
 }
 
 .pay-row img {
@@ -321,13 +410,18 @@ button {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 7px;
-  width: 245px;
+  width: 256px;
   margin: 0 auto;
   padding: 7px;
   border: 3px solid #10151f;
   border-radius: 8px;
-  background: #161e2b;
-  box-shadow: inset 0 0 0 2px #526073;
+  background:
+    radial-gradient(ellipse at center, rgba(92, 244, 255, 0.12), transparent 64%),
+    #111824;
+  box-shadow:
+    inset 0 0 0 2px #526073,
+    inset 0 15px 22px rgba(255, 255, 255, 0.08),
+    inset 0 -18px 24px rgba(0, 0, 0, 0.3);
 }
 
 .center-line {
@@ -336,9 +430,47 @@ button {
   right: 8px;
   top: 50%;
   z-index: 3;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg, transparent, rgba(255, 82, 108, 0.92), transparent);
   box-shadow: 0 0 10px rgba(255, 82, 108, 0.9);
+}
+
+.payline {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  z-index: 3;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255, 216, 76, 0.92), transparent);
+  box-shadow: 0 0 9px rgba(255, 216, 76, 0.8);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.payline.active {
+  opacity: 1;
+  animation: paylineFlash 0.45s ease-in-out infinite;
+}
+
+.payline.diag-a {
+  transform: rotate(35deg);
+}
+
+.payline.diag-b {
+  transform: rotate(-35deg);
+}
+
+.reel-shine {
+  position: absolute;
+  inset: 8px;
+  z-index: 4;
+  border-radius: 6px;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.32), transparent 18%, transparent 68%, rgba(92, 244, 255, 0.11)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 40%);
+  pointer-events: none;
+  mix-blend-mode: screen;
 }
 
 .side-arrow {
@@ -352,6 +484,7 @@ button {
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
   transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .side-arrow.left {
@@ -368,25 +501,61 @@ button {
 
 .reel {
   display: grid;
-  grid-template-rows: repeat(3, 56px);
+  grid-template-rows: repeat(3, 58px);
   overflow: hidden;
   border: 3px solid #321a20;
   border-radius: 6px;
-  background: #f6f2e8;
-  box-shadow: inset 0 7px 12px rgba(255, 255, 255, 0.65), inset 0 -8px 14px rgba(0, 0, 0, 0.15);
+  background:
+    linear-gradient(90deg, #c9c0ae 0%, #fffaf0 16%, #f6f2e8 50%, #d6ccba 84%, #a69986 100%);
+  box-shadow:
+    inset 12px 0 18px rgba(255, 255, 255, 0.35),
+    inset -12px 0 16px rgba(0, 0, 0, 0.12),
+    inset 0 7px 12px rgba(255, 255, 255, 0.65),
+    inset 0 -8px 14px rgba(0, 0, 0, 0.15);
+  transition: transform 0.16s ease, filter 0.16s ease;
+  transform: perspective(260px) rotateY(0deg);
+}
+
+.reel-left {
+  transform: perspective(260px) rotateY(7deg);
+}
+
+.reel-center {
+  transform: perspective(260px) rotateY(0deg);
+}
+
+.reel-right {
+  transform: perspective(260px) rotateY(-7deg);
+}
+
+.reel.stop-bounce {
+  animation: reelStop 0.24s ease-out;
+}
+
+.reel.win-reel {
+  box-shadow:
+    inset 12px 0 18px rgba(255, 255, 255, 0.35),
+    inset -12px 0 16px rgba(0, 0, 0, 0.12),
+    inset 0 7px 12px rgba(255, 255, 255, 0.65),
+    inset 0 -8px 14px rgba(0, 0, 0, 0.15),
+    0 0 18px rgba(92, 244, 255, 0.9);
 }
 
 .symbol-cell {
   display: grid;
   place-items: center;
   border-bottom: 1px solid rgba(64, 24, 24, 0.18);
+  background:
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.48), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38), transparent 28%, rgba(0, 0, 0, 0.07));
 }
 
 .symbol-cell img {
-  width: 44px;
-  height: 42px;
+  width: 46px;
+  height: 44px;
   object-fit: contain;
   image-rendering: pixelated;
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.18));
 }
 
 .symbol-cell img.infinity {
@@ -395,15 +564,24 @@ button {
   image-rendering: auto;
 }
 
+.symbol-cell.win-cell img {
+  animation: symbolWin 0.5s ease-in-out infinite;
+}
+
 .reel.spinning .symbol-cell {
-  animation: reelRoll 0.15s steps(3, end) infinite;
+  animation: reelRoll 0.12s steps(3, end) infinite;
+  filter: blur(1px);
 }
 
 .meter-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 5px;
   margin: 8px auto 8px;
+}
+
+.bonus-meter strong {
+  color: var(--gold);
 }
 
 .meter {
@@ -433,15 +611,15 @@ button {
 
 .button-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
   padding: 7px 4px 9px;
   border-top: 2px solid rgba(255, 255, 255, 0.12);
 }
 
 .round-button {
   display: grid;
-  min-height: 56px;
+  min-height: 54px;
   place-items: center;
   border: 3px solid #20242d;
   border-radius: 50%;
@@ -450,7 +628,23 @@ button {
   font-weight: 950;
   text-transform: uppercase;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.55);
-  box-shadow: inset 0 5px 0 rgba(255, 255, 255, 0.28), inset 0 -7px 0 rgba(0, 0, 0, 0.26), 0 5px 0 #111720;
+  background-blend-mode: screen, normal;
+  box-shadow:
+    inset 0 6px 0 rgba(255, 255, 255, 0.36),
+    inset 0 -9px 0 rgba(0, 0, 0, 0.26),
+    0 5px 0 #111720,
+    0 10px 18px rgba(0, 0, 0, 0.28);
+  transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+}
+
+.round-button:hover {
+  filter: brightness(1.08);
+}
+
+.round-button:active,
+.round-button.pressed {
+  transform: translateY(4px);
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.2), inset 0 -4px 0 rgba(0, 0, 0, 0.24), 0 1px 0 #111720;
 }
 
 .round-button span,
@@ -460,22 +654,44 @@ button {
 }
 
 .round-button.spin {
-  background: radial-gradient(circle at 35% 25%, #ffb3c4, #ff526c 45%, #9f1c39);
+  background:
+    radial-gradient(circle at 34% 22%, white, transparent 16%),
+    radial-gradient(circle at 35% 25%, #ffb3c4, #ff526c 45%, #9f1c39);
 }
 
 .round-button.bet {
-  background: radial-gradient(circle at 35% 25%, #fff7b0, #ffd84c 45%, #af7a12);
+  background:
+    radial-gradient(circle at 34% 22%, white, transparent 16%),
+    radial-gradient(circle at 35% 25%, #fff7b0, #ffd84c 45%, #af7a12);
   color: #32230a;
 }
 
 .round-button.max {
-  background: radial-gradient(circle at 35% 25%, #b9ffbe, #5cff70 45%, #209a39);
+  background:
+    radial-gradient(circle at 34% 22%, white, transparent 16%),
+    radial-gradient(circle at 35% 25%, #b9ffbe, #5cff70 45%, #209a39);
   color: #06250f;
+}
+
+.round-button.auto {
+  background:
+    radial-gradient(circle at 34% 22%, white, transparent 16%),
+    radial-gradient(circle at 35% 25%, #d7b8ff, #9d5cff 45%, #5b269f);
+}
+
+.round-button.auto.active {
+  animation: autoPulse 0.8s ease-in-out infinite;
 }
 
 .round-button:disabled {
   cursor: wait;
   filter: grayscale(0.6) brightness(0.75);
+}
+
+.round-button:focus-visible,
+.sound-toggle:focus-visible {
+  outline: 3px solid rgba(92, 244, 255, 0.85);
+  outline-offset: 3px;
 }
 
 .message-strip {
@@ -497,6 +713,94 @@ button {
 
 .message-strip.lose {
   color: #ffb4bf;
+}
+
+.jackpot-banner {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  z-index: 10;
+  padding: 8px 18px;
+  border: 3px solid #fff2a8;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.38), transparent 30%),
+    linear-gradient(90deg, #ff426d, #ffd84c, #5cf4ff);
+  color: white;
+  font-size: 2rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #27100e;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.72);
+  pointer-events: none;
+}
+
+.jackpot-banner.show {
+  animation: jackpotBanner 1.05s ease-out forwards;
+}
+
+.bonus-banner {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  z-index: 11;
+  padding: 8px 16px;
+  border: 3px solid #b9ffbe;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 30%),
+    linear-gradient(90deg, #5cff70, #5cf4ff, #9d5cff);
+  color: white;
+  font-size: 1.55rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #09210f;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.76);
+  pointer-events: none;
+}
+
+.bonus-banner.show {
+  animation: jackpotBanner 1.2s ease-out forwards;
+}
+
+.bonus-total {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  z-index: 12;
+  display: grid;
+  min-width: 250px;
+  place-items: center;
+  padding: 14px 20px;
+  border: 3px solid #fff2a8;
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 26%),
+    linear-gradient(135deg, #251307, #6d3b0b 48%, #ffd84c);
+  box-shadow: 0 0 28px rgba(255, 216, 76, 0.8), 0 18px 42px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.72);
+  pointer-events: none;
+}
+
+.bonus-total.show {
+  animation: bonusTotalPop 2.2s ease-out forwards;
+}
+
+.bonus-total span {
+  color: #fff2a8;
+  font-size: 0.86rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #301300;
+}
+
+.bonus-total strong {
+  color: white;
+  font-size: 1.55rem;
+  text-shadow: 2px 2px 0 #301300, 0 0 12px rgba(255, 216, 76, 0.8);
 }
 
 .client-bottom {
@@ -585,6 +889,90 @@ button {
   }
 }
 
+@keyframes neonRail {
+  0% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% {
+    filter: hue-rotate(80deg) brightness(1.3);
+  }
+  100% {
+    filter: hue-rotate(160deg) brightness(1);
+  }
+}
+
+@keyframes paylineFlash {
+  50% {
+    filter: brightness(1.8);
+    opacity: 0.45;
+  }
+}
+
+@keyframes autoPulse {
+  50% {
+    transform: translateY(-2px);
+    filter: brightness(1.18);
+  }
+}
+
+@keyframes reelStop {
+  0% {
+    transform: translateY(-8px);
+  }
+  55% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes symbolWin {
+  50% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px rgba(92, 244, 255, 0.9));
+  }
+}
+
+@keyframes cabinetJackpot {
+  50% {
+    transform: scale(1.018);
+    filter: brightness(1.22) saturate(1.24);
+  }
+}
+
+@keyframes jackpotBanner {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.72) rotate(-5deg);
+  }
+  18%,
+  78% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -72%) scale(1.12) rotate(4deg);
+  }
+}
+
+@keyframes bonusTotalPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.72);
+  }
+  16%,
+  82% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -68%) scale(1.08);
+  }
+}
+
 @keyframes coinPop {
   to {
     transform: translate(var(--x), var(--y)) rotate(460deg);
@@ -594,7 +982,11 @@ button {
 
 @media (max-width: 720px) {
   .client {
-    grid-template-rows: 38px 1fr 42px;
+    grid-template-rows: 38px 1fr 34px;
+  }
+
+  .room {
+    padding: 8px 10px;
   }
 
   .client-top nav span {
@@ -607,15 +999,203 @@ button {
   }
 
   .slot-cabinet {
-    width: min(360px, calc(100vw - 34px));
-    transform: scale(0.96);
+    width: min(348px, calc(100vw - 34px));
+    padding: 7px 13px 10px;
+    transform: perspective(900px) rotateX(1.5deg);
+  }
+
+  .slot-title {
+    grid-template-columns: 1fr 68px 1fr;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+
+  .slot-title span,
+  .slot-title strong {
+    min-height: 30px;
+    font-size: 0.96rem;
+  }
+
+  .slot-title img {
+    width: 68px;
+    height: 36px;
+  }
+
+  .paytable {
+    margin-bottom: 6px;
+    padding: 5px 9px 6px;
+  }
+
+  .jackpot-display {
+    min-height: 28px;
+    padding: 4px 7px;
+  }
+
+  .paytable h2 {
+    font-size: 0.78rem;
+  }
+
+  .pay-row {
+    grid-template-columns: 62px 28px 1fr;
+    min-height: 15px;
+    font-size: 0.68rem;
+  }
+
+  .pay-row strong {
+    font-size: 0.68rem;
+  }
+
+  .paytable p {
+    font-size: 0.7rem;
+  }
+
+  .reel-zone {
+    width: 236px;
+    padding: 6px;
+  }
+
+  .reel {
+    grid-template-rows: repeat(3, 46px);
+  }
+
+  .symbol-cell img {
+    width: 38px;
+    height: 36px;
+  }
+
+  .symbol-cell img.infinity {
+    width: 56px;
+    height: 34px;
+  }
+
+  .meter-row {
+    margin: 6px auto;
+    gap: 4px;
+  }
+
+  .meter {
+    min-height: 37px;
+    padding: 3px;
+  }
+
+  .button-row {
+    gap: 5px;
+    padding: 6px 4px 7px;
+  }
+
+  .round-button {
+    min-height: 44px;
+    font-size: 0.78rem;
+  }
+
+  .message-strip {
+    min-height: 24px;
+    font-size: 0.75rem;
   }
 
   .client-bottom {
     grid-template-columns: 1fr 90px;
+    min-height: 34px;
+    padding: 3px 8px;
+  }
+
+  .chat-box,
+  .sound-toggle {
+    min-height: 26px;
+    line-height: 22px;
   }
 
   .dock-icons {
     display: none;
+  }
+}
+
+@media (max-height: 650px) and (min-width: 721px) {
+  .room {
+    padding: 10px 16px;
+  }
+
+  .slot-cabinet {
+    transform: perspective(900px) rotateX(1.5deg) scale(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Publish widget mode: slot only, transparent background. */
+body {
+  background: transparent;
+}
+
+.slot-widget {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  background: transparent;
+}
+
+.client,
+.room,
+.client-top,
+.client-bottom,
+.room-floor,
+.hotel-badge,
+.player-box {
+  background: transparent;
+}
+
+.slot-cabinet {
+  isolation: isolate;
+}
+
+.slot-cabinet::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  width: auto;
+  border-radius: 18px 18px 26px 26px;
+  background: conic-gradient(from 0deg, var(--cyan), var(--pink), var(--gold), var(--cyan));
+  box-shadow: 0 0 22px rgba(92, 244, 255, 0.75), 0 0 34px rgba(255, 100, 216, 0.45);
+  animation: borderSpin 4s linear infinite;
+  z-index: -2;
+}
+
+.slot-cabinet::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  width: auto;
+  border-radius: 15px 15px 23px 23px;
+  background: #151b24;
+  z-index: -1;
+}
+
+.slot-cabinet.bonus-mode::before {
+  background: conic-gradient(from 0deg, #fff2a8, var(--gold), #ff9f2e, #fff2a8);
+  box-shadow: 0 0 28px rgba(255, 216, 76, 0.9), 0 0 42px rgba(255, 159, 46, 0.45);
+}
+
+.floating-sound {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 20;
+  min-width: 78px;
+}
+
+@keyframes borderSpin {
+  to {
+    filter: hue-rotate(360deg);
   }
 }

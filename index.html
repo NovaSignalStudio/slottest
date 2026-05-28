@@ -3,34 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Infinity Slots, minigioco slot in stile Habbo/Nitro con jackpot validabile server-side."
+    />
     <title>Infinity Slots</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="preload" href="assets/infinity-logo-symbol.png" as="image" />
+    <link rel="preload" href="assets/diamond.svg" as="image" />
+    <link rel="stylesheet" href="styles.css?v=server-ready-1" />
   </head>
   <body>
-    <main class="client" aria-label="Infinity Slots">
-      <header class="client-top">
-        <div class="hotel-badge">INFINITY</div>
-        <nav aria-label="Client navigation">
-          <span>Hotel</span>
-          <span>Shop</span>
-          <span>Home</span>
-        </nav>
-        <div class="player-box">
-          <span>RetroPlayer</span>
-          <strong id="topBalance">500</strong>
-        </div>
-      </header>
-
-      <section class="room">
-        <div class="room-floor" aria-hidden="true">
-          <span class="furni sofa"></span>
-          <span class="furni table"></span>
-          <span class="furni plant"></span>
-          <span class="furni arcade"></span>
-          <span class="avatar one"></span>
-          <span class="avatar two"></span>
-        </div>
-
+    <main class="slot-widget" aria-label="Infinity Slots">
         <section class="slot-cabinet" id="slotMachine" aria-label="Infinity slot machine">
           <div class="cabinet-glow" aria-hidden="true"></div>
 
@@ -41,77 +24,90 @@
           </div>
 
           <div class="paytable">
+            <div class="jackpot-display">
+              <span>Infinity Jackpot</span>
+              <strong id="jackpotDisplay">100d</strong>
+            </div>
             <h2>Paytable</h2>
-            <div class="pay-row">
+            <div class="pay-row" data-pay="infinity">
               <span>Match 3</span>
               <img src="assets/infinity-logo-symbol.png" alt="" />
               <strong id="jackpotText">Jackpot 100</strong>
             </div>
-            <div class="pay-row">
+            <div class="pay-row" data-pay="seven">
+              <span>Match 3</span>
+              <img src="assets/seven.svg" alt="" />
+              <strong id="sevenText">Raro 1000</strong>
+            </div>
+            <div class="pay-row" data-pay="diamond">
               <span>Match 3</span>
               <img src="assets/diamond.svg" alt="" />
-              <strong>Diamond bonus</strong>
+              <strong id="diamondText">Diamond bonus</strong>
             </div>
-            <div class="pay-row">
-              <span>Match 3</span>
-              <img src="assets/duck.svg" alt="" />
-              <strong>Duck prize</strong>
-            </div>
-            <p>3 logo Infinity sulla linea centrale vincono.</p>
+            <p id="paytableHint">Centro e diagonali pagano. Il 7 paga raro.</p>
           </div>
 
           <div class="reel-zone">
-            <button class="side-arrow left" type="button" aria-label="Decorazione sinistra"></button>
+            <span class="side-arrow left" aria-hidden="true"></span>
             <div class="center-line" aria-hidden="true"></div>
-            <div class="reel" id="reel0"></div>
-            <div class="reel" id="reel1"></div>
-            <div class="reel" id="reel2"></div>
-            <button class="side-arrow right" type="button" aria-label="Decorazione destra"></button>
+            <div class="payline diag-a" aria-hidden="true"></div>
+            <div class="payline diag-b" aria-hidden="true"></div>
+            <div class="reel-shine" aria-hidden="true"></div>
+            <div class="reel reel-left" id="reel0"></div>
+            <div class="reel reel-center" id="reel1"></div>
+            <div class="reel reel-right" id="reel2"></div>
+            <span class="side-arrow right" aria-hidden="true"></span>
           </div>
 
           <div class="meter-row">
             <div class="meter">
-              <span>Credits</span>
-              <strong><b id="balance">500</b>c</strong>
+              <span>Diamanti</span>
+              <strong><b id="balance">500</b>d</strong>
             </div>
             <div class="meter">
               <span>Bet</span>
-              <strong><b id="currentBet">10</b>c</strong>
+              <strong><b id="currentBet">10</b>d</strong>
             </div>
             <div class="meter">
               <span>Last win</span>
-              <strong><b id="lastWin">0</b>c</strong>
+              <strong><b id="lastWin">0</b>d</strong>
+            </div>
+            <div class="meter bonus-meter">
+              <span>Free spins</span>
+              <strong><b id="freeSpins">0</b></strong>
             </div>
           </div>
 
           <div class="button-row">
-            <button class="round-button spin" type="button" id="playButton">
+            <button class="round-button spin" type="button" id="playButton" aria-label="Avvia spin">
               <span>Stop</span>
               <strong>Spin</strong>
             </button>
-            <button class="round-button bet" type="button" id="betOne">
+            <button class="round-button bet" type="button" id="betOne" aria-label="Cambia puntata">
               <span>Bet</span>
               <strong>One</strong>
             </button>
-            <button class="round-button max" type="button" id="maxBet">
+            <button class="round-button max" type="button" id="maxBet" aria-label="Imposta puntata massima 50">
               <span>Max</span>
               <strong>Bet</strong>
+            </button>
+            <button class="round-button auto" type="button" id="autoSpin" aria-label="Avvia autogiri">
+              <span>Auto</span>
+              <strong>Spin</strong>
             </button>
           </div>
 
           <div class="message-strip" id="message" aria-live="polite">Good luck, Habbo.</div>
+          <div class="jackpot-banner" id="jackpotBanner" aria-hidden="true">Jackpot</div>
+          <div class="bonus-banner" id="bonusBanner" aria-hidden="true">Free Spins</div>
+          <div class="bonus-total" id="bonusTotal" aria-live="polite" aria-hidden="true">
+            <span>Bonus win</span>
+            <strong><b id="bonusTotalAmount">0</b> diamanti</strong>
+          </div>
         </section>
-      </section>
-
-      <footer class="client-bottom">
-        <div class="dock-icons" aria-hidden="true">
-          <span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="chat-box">Spin to win</div>
-        <button class="sound-toggle active" type="button" id="soundToggle">Sound</button>
-      </footer>
+        <button class="sound-toggle active floating-sound" type="button" id="soundToggle">Sound</button>
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=server-ready-1"></script>
   </body>
 </html>
